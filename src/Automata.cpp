@@ -1,3 +1,6 @@
+// Copyright 2022 UNN-IASR
+#include <string>
+#include <vector>
 #include "Automata.h"
 
 Automata::Automata() {
@@ -8,7 +11,7 @@ Automata::Automata() {
     menu.push_back(menu_item("Water", 0.9));
 }
 
-std::vector<menu_item> Automata::getMenu(){
+std::vector<menu_item> Automata::getMenu() {
     return menu;
 }
 
@@ -20,7 +23,7 @@ void Automata::on() {
     }
 }
 
-void Automata::off(){
+void Automata::off() {
     if (state != STATES::OFF) {
         state = STATES::OFF;
         cash = 0;
@@ -29,7 +32,7 @@ void Automata::off(){
     }
 }
 
-void Automata::chois(std::string name, std::ostream& os){
+void Automata::chois(std::string name, std::ostream& os) {
     if (state == STATES::WAIT) {
         if (name == "admin") {
             role = "admin";
@@ -58,7 +61,7 @@ void Automata::chois(std::string name, std::ostream& os){
 void Automata::coin(double coin, std::ostream& os) {
     if (coin <=0) {
         throw InvalidAmountException();
-    } else if(state == STATES::CHOIS) {
+    } else if (state == STATES::CHOIS) {
         cash += coin;
         state = STATES::ACCEPT;
         check(os);
@@ -72,14 +75,12 @@ void Automata::check(std::ostream& os) {
         if (cash == payment->price) {
             state = STATES::CHECK;
             cook(os);
-        }
-        else if (cash > payment->price) {
+        } else if (cash > payment->price) {
             double surrender = cash - payment->price;
             change(surrender, os);
             state = STATES::CHECK;
-            cook(os);      
-        }
-        else if (cash < payment->price) {
+            cook(os);
+        } else if (cash < payment->price) {
             state = STATES::CHOIS;
         }
     } else {
@@ -93,11 +94,12 @@ void Automata::cancel(std::ostream& os) {
         delete payment;
         if (cash > 0) {
             change(cash, os);
-        }       
+        }
     } else {
         throw InvalidStateException();
     }
 }
+
 void Automata::cook(std::ostream& os) {
     if (state == STATES::CHECK) {
         state = STATES::COOK;
@@ -110,7 +112,8 @@ void Automata::cook(std::ostream& os) {
 
 void Automata::finish(std::ostream& os) {
     if (state == STATES::COOK) {
-        os << "Your drink("<< payment->name<<") has been successfully prepared!!!" <<std::endl;
+        os << "Your drink(" << payment->name
+        << ") has been successfully prepared!!!" << std::endl;
         state = STATES::WAIT;
         cash = 0;
     } else {
@@ -123,7 +126,7 @@ void Automata::change(double sum, std::ostream& os) {
     os << "Your change: " << sum << "$" << std::endl;
 }
 
-void Automata::addMenu(std::string name, double price){
+void Automata::addMenu(std::string name, double price) {
     if (role == "admin" && state == STATES::WAIT) {
         menu_item item(name, price);
         menu.push_back(item);
