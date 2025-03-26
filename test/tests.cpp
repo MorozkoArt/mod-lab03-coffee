@@ -66,7 +66,8 @@ TEST(AutomataTest, MessageOutput2) {
     automata.chois("Fanta", output);
     output.str("");
     automata.coin(1.2, output);
-    EXPECT_EQ(output.str(), "Your drink(Fanta) has been successfully prepared!!!\n");
+    EXPECT_EQ(output.str(),
+        "Your drink(Fanta) has been successfully prepared!!!\n");
 }
 
 TEST(AutomataTest, MessageOutput3) {
